@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viral Font Generator for Instagram & WhatsApp</title>
+    <meta name="description" content="Convert normal text to stylish fonts for Instagram Bio, WhatsApp, and Facebook. Free Fancy Text Generator tool with live preview.">
+    <style>
+        /* Theme Variables (UNCHANGED) */
+        :root {
+            --bg-color: #f4f4f9;
+            --container-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #dddddd;
+            --hover-bg: #f9f9f9;
+            --accent-color: #3498db;
+            --success-color: #27ae60;
+            --wa-color: #25D366;
+            --danger-color: #e74c3c;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --container-bg: #2d2d2d;
+            --text-color: #f0f0f0;
+            --border-color: #444444;
+            --hover-bg: #3d3d3d;
+        }
+
+        /* Clean UI & Speed Strategy */
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--container-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        /* Header & Dark Mode Toggle */
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: var(--text-color);
+            margin: 0;
+            font-size: 24px;
+            flex-grow: 1;
+        }
+        .theme-toggle {
+            background: none;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Aesthetic Symbol Bar */
+        .symbol-bar {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            scrollbar-width: thin;
+        }
+        .symbol-btn {
+            background: var(--hover-bg);
+            border: 1px solid var(--border-color);
+            padding: 5px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: 16px;
+            color: var(--text-color);
+            transition: 0.2s;
+        }
+        .symbol-btn:hover {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .input-area {
+            margin-bottom: 10px; 
+            text-align: center;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 18px;
+            resize: none;
+            box-sizing: border-box;
+            background-color: var(--container-bg);
+            color: var(--text-color);
+        }
+        textarea:focus {
+            border-color: var(--accent-color);
+            outline: none;
+        }
+
+        /* Character Counter */
+        .char-counter {
+            text-align: right;
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .char-counter span { color: var(--accent-color); }
+        .limit-exceeded { color: var(--danger-color) !important; }
+
+        /* Feature A: Live Insta Mockup */
+        .insta-preview {
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .insta-avatar {
+            width: 60px;
+            height: 60px;
+            background: #ddd;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        .insta-info h4 { margin: 0 0 5px 0; font-size: 14px; }
+        .insta-bio { font-size: 14px; white-space: pre-wrap; }
+
+        /* Result Items */
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+        .result-item:hover {
+            background-color: var(--hover-bg);
+        }
+        .fancy-text {
+            font-size: 18px;
+            word-break: break-all;
+            margin-right: 10px;
+        }
+        
+        /* Buttons */
+        .action-btns {
+            display: flex;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+        .btn {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .copy-btn { background-color: var(--accent-color); min-width: 70px; }
+        .copy-btn:hover { background-color: #2980b9; }
+        
+        /* Feature B: WhatsApp Button */
+        .wa-btn { background-color: var(--wa-color); }
+        .wa-btn:hover { background-color: #1ebe57; }
+
+        /* Retention Strategy: Bookmark Alert */
+        .bookmark-alert {
+            background: #ffeaa7;
+            padding: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+            display: none;
+        }
+        
+        /* Toast Notification */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+        }
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+
+        /* SEO Content & Legal Section Style */
+        .seo-content {
+            margin-top: 50px;
+            border-top: 2px solid var(--border-color);
+            padding-top: 20px;
+            line-height: 1.6;
+        }
+        .legal-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            font-size: 14px;
+            color: #666;
+        }
+        .legal-section h3 {
+            color: var(--text-color);
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        
+        /* Footer Links */
+        .footer-links {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 14px;
+            padding-bottom: 10px;
+        }
+        .footer-links a {
+            color: var(--accent-color);
+            text-decoration: none;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div class="header-top">
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">🌓</button>
+        <h1>✨ Fancy Font Generator</h1>
+        <div style="width: 40px;"></div>
+    </div>
+
+    <div class="bookmark-alert" id="bookmarkMsg">
+        💡 Tip: Press <strong>Ctrl + D</strong> to bookmark this page for daily use!
+    </div>
+
+    <p style="text-align:center;">Type your text below for Magic!</p>
+
+    <div class="symbol-bar">
+        <button class="symbol-btn" onclick="addSymbol('★')">★</button>
+        <button class="symbol-btn" onclick="addSymbol('✈')">✈</button>
+        <button class="symbol-btn" onclick="addSymbol('❥')">❥</button>
+        <button class="symbol-btn" onclick="addSymbol('♛')">♛</button>
+        <button class="symbol-btn" onclick="addSymbol('✔')">✔</button>
+        <button class="symbol-btn" onclick="addSymbol('✖')">✖</button>
+        <button class="symbol-btn" onclick="addSymbol('➤')">➤</button>
+        <button class="symbol-btn" onclick="addSymbol('✦')">✦</button>
+        <button class="symbol-btn" onclick="addSymbol('⚡')">⚡</button>
+        <button class="symbol-btn" onclick="addSymbol('✿')">✿</button>
+        <button class="symbol-btn" onclick="addSymbol('⚽')">⚽</button>
+        <button class="symbol-btn" onclick="addSymbol('♫')">♫</button>
+    </div>
+
+    <div class="input-area">
+        <textarea id="inputText" placeholder="Type here (e.g. Bio for Insta)..." oninput="generateFonts()"></textarea>
+    </div>
+    
+    <div class="char-counter" id="charCounter">
+        0 Characters | 0 Words
+    </div>
+
+    <div class="insta-preview">
+        <div class="insta-avatar">👤</div>
+        <div class="insta-info">
+            <h4>username_preview</h4>
+            <div class="insta-bio" id="livePreview">Your bio will appear here...</div>
+        </div>
+    </div>
+
+    <div id="outputArea">
+        </div>
+
+    <div class="seo-content">
+        <h2>About This Tool</h2>
+        <p>This tool allows you to convert normal text into stylish fonts that you can use on Instagram, Facebook, Twitter, and WhatsApp. We use advanced Unicode characters to generate these styles.</p>
+
+        <div id="privacy" class="legal-section">
+            <h3>🔒 Privacy Policy</h3>
+            <p>Your privacy is important to us. This tool operates entirely in your browser (Client-Side). <strong>We do not store, save, or transmit any text you type here to any server.</strong> Everything happens on your device.</p>
+            <p>We may use third-party advertising companies (like Google AdSense) to serve ads when you visit our website. These companies may use cookies to provide relevant advertisements.</p>
+        </div>
+
+        <div id="terms" class="legal-section">
+            <h3>📜 Terms of Use</h3>
+            <p>By using this website, you agree to the following terms:</p>
+            <ul>
+                <li>This tool is free for personal and commercial use.</li>
+                <li>The website is provided "as is" without any warranties.</li>
+                <li>You agree not to use this tool for generating hate speech or illegal content.</li>
+            </ul>
+        </div>
+
+        <div id="contact" class="legal-section">
+            <h3>📧 Contact Us</h3>
+            <p>Have suggestions, found a bug, or want to advertise with us?</p>
+            <p>Email us at: <strong>best247team@gmail.com</strong></p>
+            <p>We aim to respond to all inquiries within 24-48 hours.</p>
+        </div>
+    </div>
+
+    <div class="footer-links">
+        <a href="#privacy">Privacy Policy</a> | 
+        <a href="#terms">Terms of Use</a> | 
+        <a href="#contact">Contact Us</a>
+    </div>
+
+</div>
+
+<div id="toast">📋 Text Copied to Clipboard!</div>
+
+<script>
+    // --- Font Mapping Data (UPDATED WITH 10 NEW FONTS) ---
+    const fonts = {
+        "Bold": "𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵",
+        "Italic": "𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻0123456789",
+        // NEW FONT 1: Gothic
+        "Gothic": "𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷0123456789",
+        // NEW FONT 2: Double Struck
+        "Double": "𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡",
+        // NEW FONT 3: Serif Bold
+        "Serif B": "𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗",
+        // NEW FONT 4: Serif Italic
+        "Serif I": "𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧0123456789",
+        // NEW FONT 5: Monospace
+        "Mono": "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚉𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿",
+        "Script": "𝒜𝐵𝒞𝒟𝐸𝐹𝒢𝐻𝐼𝒥𝒦𝐿𝑀𝒩𝒪𝒫𝒬𝑅𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏0123456789",
+        "Bubble": "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ0①②③④⑤⑥⑦⑧⑨",
+        "Square": "🅂🅀🅄🄰🅁🄴 🄵🄾🄽🅃 🅃🄴🅇🅃 🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉0123456789",
+        "Currency": "₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎⱫ₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎⱫ0123456789",
+        "Wide": "Ｗｉｄｅ Ｔｅｘｔ ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ",
+    };
+    
+    // Blue Text Map
+    const blueMap = {
+        'a': '🇦 ', 'b': '🇧 ', 'c': '🇨 ', 'd': '🇩 ', 'e': '🇪 ', 'f': '🇫 ', 'g': '🇬 ', 'h': '🇭 ', 'i': '🇮 ', 'j': '🇯 ', 'k': '🇰 ', 'l': '🇱 ', 'm': '🇲 ', 'n': '🇳 ', 'o': '🇴 ', 'p': '🇵 ', 'q': '🇶 ', 'r': '🇷 ', 's': '🇸 ', 't': '🇹 ', 'u': '🇺 ', 'v': '🇻 ', 'w': '🇼 ', 'x': '🇽 ', 'y': '🇾 ', 'z': '🇿 '
+    };
+
+    const standard = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    // --- Main Functions ---
+
+    function addSymbol(sym) {
+        const input = document.getElementById("inputText");
+        input.value += sym;
+        generateFonts();
+        input.focus();
+    }
+
+    function generateFonts() {
+        const input = document.getElementById("inputText").value;
+        const outputArea = document.getElementById("outputArea");
+        const livePreview = document.getElementById("livePreview");
+        
+        updateCounter(input);
+        livePreview.textContent = input || "Your bio will appear here...";
+
+        outputArea.innerHTML = ""; // Clear previous
+
+        if(input.trim() === "") return;
+
+        document.getElementById("bookmarkMsg").style.display = "block";
+
+        // 1. Standard & Unique Fonts (Includes new 5 mapped fonts)
+        for (const [styleName, mapString] of Object.entries(fonts)) {
+            let convertedText = "";
+            for (let char of input) {
+                const index = standard.indexOf(char);
+                if (index > -1 && index < mapString.length / 2) { 
+                    convertedText += getCharFromMap(char, mapString);
+                } else {
+                    convertedText += char;
+                }
+            }
+            createResultItem(styleName, convertedText);
+        }
+
+        // NEW FONT 6: Underline (Logic)
+        createResultItem("Underline", applyCombining(input, '\u0332'));
+
+        // NEW FONT 7: Double Underline (Logic)
+        createResultItem("Double Underline", applyCombining(input, '\u0333'));
+
+        // NEW FONT 8: Slash Text (Logic)
+        createResultItem("Slash", applyCombining(input, '\u0338'));
+
+        // NEW FONT 9: Hearts (Logic)
+        createResultItem("Heart Text ♥", input.split('').join('♥'));
+
+        // NEW FONT 10: Fire (Logic)
+        createResultItem("Fire Text 🔥", input.split('').join('🔥'));
+
+        // Existing Pro Fonts
+        // Blue Text
+        let blueText = "";
+        for (let char of input.toLowerCase()) {
+            if (blueMap[char]) blueText += blueMap[char];
+            else blueText += char;
+        }
+        createResultItem("Blue Text 🔵", blueText);
+
+        // Wavy Text
+        let wavyText = "";
+        for (let char of input) {
+            wavyText += `≋${char}`;
+        }
+        if(wavyText) wavyText += "≋";
+        createResultItem("Wavy 🌊", wavyText);
+
+        // Galaxy Text
+        let galaxyText = input.split('').join('✨');
+        createResultItem("Galaxy ✨", galaxyText);
+
+        // Decorations
+        createResultItem("Decorated", `(✿◠‿◠) ${input} (◡‿◡✿)`);
+        
+        // Glitch & Reverse
+        createResultItem("Hacker/Glitch", glitchText(input));
+        createResultItem("Reverse/Mirror", input.split("").reverse().join(""));
+    }
+
+    function updateCounter(text) {
+        const charCount = text.length;
+        const wordCount = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
+        const counterDiv = document.getElementById("charCounter");
+        let html = `<span>${charCount}</span> Characters | <span>${wordCount}</span> Words`;
+        if (charCount > 150) html += ` <span class="limit-exceeded">(Over Instagram Limit!)</span>`;
+        counterDiv.innerHTML = html;
+    }
+
+    // Helper for combining characters (Underline, Slash, etc.)
+    function applyCombining(text, mark) {
+        let result = "";
+        for(let char of text) {
+            result += char + mark;
+        }
+        return result;
+    }
+
+    function glitchText(text) {
+        const glitchChars = ['\u0336', '\u035c', '\u035d', '\u0300', '\u0301']; 
+        let result = "";
+        for (let char of text) {
+            result += char;
+            if (char !== " ") result += glitchChars[Math.floor(Math.random() * glitchChars.length)];
+        }
+        return result;
+    }
+
+    function getCharFromMap(char, mapStr) {
+        const index = standard.indexOf(char);
+        if (index === -1) return char;
+        const mapArray = Array.from(mapStr);
+        return mapArray[index] || char; 
+    }
+
+    function createResultItem(label, text) {
+        const outputArea = document.getElementById("outputArea");
+        const div = document.createElement("div");
+        div.className = "result-item";
+        const waLink = `https://wa.me/?text=${encodeURIComponent(text)}`;
+
+        div.innerHTML = `
+            <div class="fancy-text">${text}</div>
+            <div class="action-btns">
+                <button class="btn copy-btn" onclick="copyText('${text.replace(/'/g, "\\'")}')">Copy</button>
+                <a href="${waLink}" target="_blank" class="btn wa-btn" title="Share on WhatsApp">WA</a>
+            </div>
+        `;
+        outputArea.appendChild(div);
+    }
+
+    function copyText(text) {
+        navigator.clipboard.writeText(text).then(() => showToast());
+    }
+
+    function showToast() {
+        const toast = document.getElementById("toast");
+        toast.className = "show";
+        setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+    }
+
+    function toggleTheme() {
+        const body = document.body;
+        const currentTheme = body.getAttribute("data-theme");
+        const newTheme = currentTheme === "dark" ? "light" : "dark";
+        body.setAttribute("data-theme", newTheme);
+        localStorage.setItem("theme", newTheme);
+    }
+
+    window.onload = () => {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) document.body.setAttribute("data-theme", savedTheme);
+    };
+</script>
+
+</body>
+</html>
